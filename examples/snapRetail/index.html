@@ -37,8 +37,10 @@
                 var output = $('#output');
                 output.empty();
                 for(var i = 0; i < response.results.length; i++) {
-                    output.append(response.results[i].marketname);
-                    output.append('<input type="submit" value="View Details" onclick="details(' + response.results[i].id + ',\'' + String(response.results[i].STORE_NAME).replace(/(['"])/g, "\\$1") + '\')">');
+                    //output.append(response.results[i].marketname);
+                    //console.log(response);
+                    console.log(response.results[i].attributes.OBJECTID)
+                    output.append('<input type="submit" value="View Details" onclick="details(' + response.results[i].attributes.OBJECTID + ',\'' + String(response.results[i].attributes.STORE_NAME).replace(/(['"])/g, "\\$1") + '\')">');
                     output.append("<br/>");
                 }
             });
@@ -46,13 +48,14 @@
 
         function details(id, name) {
             snapRetailer.detail({ "id": id }, function(response) {
+                console.log(response);
                 response = response.marketdetails;
                 var details = $('#details');
                 details.empty();
                 details.append('<h3>' + name + '</h3>');
                 
                 details.append('<br/>');
-                details.append(response.Address);
+                //details.append(response.Address);
                 details.append('<br/>');
             });
         };

@@ -104,17 +104,19 @@ SnapRetailerModule.prototype.search = function(request, callback) {
     var zipFragment = "searchFields=ZIP5&searchText={zip}";
     var locFragment = "searchFields=longtitude,latitutde&searchText={loc},{lang}";
 
-    var snapRetailerURL = " http://snap-load-balancer-244858692.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/retailer/MapServer/find?searchText=20010&contains=true&searchFields=&sr=&layers=0,2&returnGeometry=true{fragment}";
+    var snapRetailerURL = "http://snap-load-balancer-244858692.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/retailer/MapServer/find?contains=true&f=json&sr=&layers=0,2&returnGeometry=true&{fragment}";
     if("lat" in request && "lng" in request) {
         snapRetailerURL = snapRetailerURL.replace(fragmentPattern, locFragment);
     } else {
-        snapRetailertURL = snapRetailerURL.replace(fragmentPattern, zipFragment);
+        snapRetailerURL = snapRetailerURL.replace(fragmentPattern, zipFragment);
     }
 
     snapRetailerURL = snapRetailerURL.replace(zipPattern, request.zip);
     snapRetailerURL = snapRetailerURL.replace(latPattern, request.lat);
     snapRetailerURL = snapRetailerURL.replace(lngPattern, request.lng);
-
+    
+    console.log(snapRetailerURL);
+    
     CitySDK.prototype.sdkInstance.jsonpRequest(snapRetailerURL).done(
         function(response) {
             callback(response);
@@ -157,13 +159,17 @@ SnapRetailerModule.prototype.search = function(request, callback) {
  * }
  * @param request
  * @param callback
+ * http://snap-load-balancer-244858692.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/retailer/MapServer/0/undefined?f=json
  */
 SnapRetailerModule.prototype.detail = function(request, callback) {
     var idPattern = /({id})/;
 
-    var detailURL = "http://snap-load-balancer-244858692.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/retailer/MapServer/0/{id}?f=json";
+    var detailURL = "http://snap-load-balancer-244858692.us-east-1.elb.amazonaws.com/ArcGIS/rest/services/retailer/MapServer/{id}?f=json";
 
+    console.log(request)
     detailURL = detailURL.replace(idPattern, request.id);
+    
+    console.log(detailURL);
 
     CitySDK.prototype.sdkInstance.jsonpRequest(detailURL).done(
         function(response) {
